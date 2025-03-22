@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE urlrewrite PUBLIC "-//tuckey.org//DTD UrlRewrite 4.0//EN"
+        "http://www.tuckey.org/res/dtds/urlrewrite4.0.dtd">
+<urlrewrite>
+
+    <!-- Réécriture de /import_espace vers /admin/espace/import -->
+    <rule>
+        <from><!--/import_espace --></from>
+        <to><!--/admin/espace/import --></to>
+    </rule>
+
+    <!-- Réécriture de /espace_listes vers /admin/espaces -->
+    <rule>
+        <from><!--/espace_listes--></from>
+        <to><!--/admin/espaces--></to>
+    </rule>
+</urlrewrite>
