@@ -1,0 +1,16 @@
+package com.itu.evaluation.constante;
+
+public class UrlApi {
+    public static final String BASE_URL = "http://localhost/api/";
+
+    public static final String DASHBOARD = "http://localhost/api/dashboards";
+
+    /*offre*/
+    public static final String OFFERS = "http://localhost/api/offers";
+
+    /*invoice*/
+    public static final String INVOICES = "http://localhost/api/invoices";
+
+    /*facture*/
+    public static final String PAYEMENTS = "http://localhost/api/payments";
+}

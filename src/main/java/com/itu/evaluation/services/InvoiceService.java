@@ -8,15 +8,16 @@ import org.springframework.web.client.RestTemplate;
 import java.util.Map;
 
 @Service
-public class DashboardService {
+public class InvoiceService {
+    public final RestTemplate restTemplate;
 
-private final RestTemplate restTemplate;
-public DashboardService(RestTemplate restTemplate) {
-    this.restTemplate = restTemplate;
-}
+    public InvoiceService(RestTemplate restTemplate) {
+        this.restTemplate = restTemplate;
+    }
 
-    public Map<String, Object> getKPIs(String token) {
-        String url = UrlApi.DASHBOARD;
+
+    public Map<String, Object> getInvoices(String token){
+        String url = UrlApi.INVOICES;
         HttpHeaders headers = new HttpHeaders();
         headers.set("Authorization", "Bearer " + token);
         headers.setContentType(MediaType.APPLICATION_JSON);
@@ -27,8 +28,4 @@ public DashboardService(RestTemplate restTemplate) {
 
         return response.getBody();
     }
-
-
-
-
 }

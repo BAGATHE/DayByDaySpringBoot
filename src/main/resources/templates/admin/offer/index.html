@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/template :: head"></head>
+<body>
+<div class="wrapper">
+    <div th:replace="fragments/template :: sidebar"></div>
+
+    <div class="main-panel">
+        <div class="page-inner ">
+            <div class="row mb-4 justify-content-center align-items-center ">
+                <div th:each="entry : ${statusCount}" class="col-3">
+                    <div class="card text-white" th:classappend="${entry.key == 'won' ? 'bg-success' : (entry.key == 'in-progress' ? 'bg-warning' : 'bg-secondary')}">
+                        <div class="card-body">
+                            <h5 class="card-title text-center" th:text="${entry.key}"></h5>
+                            <p class="card-text text-center" th:text="${entry.value} + ' offres'"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="offset-2 col-8">
+                    <table class="table table-bordered table-head-bg-success mt-3">
+                        <thead>
+                        <tr>
+                            <th class="text-center" scope="col">ID</th>
+                            <th class="text-center" scope="col">Client</th>
+                            <th class="text-center" scope="col">Lead Source</th>
+                            <th class="text-center" scope="col">Lead Description</th>
+                            <th class="text-center" scope="col">Deadline</th>
+                            <th class="text-center" scope="col">Status</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="offer : ${offers}" th:classappend="${offer.status == 'won' ? 'table-success' : (offer.status == 'in-progress' ? 'table-warning' : 'table-secondary')}">
+                            <td class="text-center" th:text="${offer.id}"></td>
+                            <td class="text-center" th:text="${offer.client}"></td>
+                            <td class="text-center" th:text="${offer.leadSource}"></td>
+                            <td class="text-center" th:text="${offer.leadDescription}"></td>
+                            <td class="text-center" th:text="${offer.deadline}"></td>
+                            <td class="text-center font-weight-bold" th:text="${offer.status}"></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Chart JS -->
+            <div th:replace="fragments/template :: footer"></div>
+            <!--   Core JS Files   -->
+            <script src="/assets/js/core/jquery-3.7.1.min.js"></script>
+            <script src="/assets/js/core/popper.min.js"></script>
+            <script src="/assets/js/core/bootstrap.min.js"></script>
+            <!-- jQuery Scrollbar -->
+            <script src="/assets/js/plugin/jquery-scrollbar/jquery.scrollbar.min.js"></script>
+            <!-- Bootstrap Notify -->
+            <script src="/assets/js/plugin/bootstrap-notify/bootstrap-notify.min.js"></script>
+            <!-- Sweet Alert -->
+            <script src="/assets/js/plugin/sweetalert/sweetalert.min.js"></script>
+            <!-- Kaiadmin JS -->
+            <script src="/assets/js/kaiadmin.min.js"></script>
+        </div>
+    </div>
+</body>
+</html>

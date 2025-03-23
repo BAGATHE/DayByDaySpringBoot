@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/template :: head"></head>
+<body>
+<div class="wrapper">
+  <div th:replace="fragments/template :: sidebar"></div>
+
+  <div class="main-panel">
+    <div class="page-inner">
+      <div class="row">
+        <div class="offset-1 col-10">
+          <table class="table table-bordered table-head-bg-success mt-3">
+            <thead>
+            <tr>
+              <th class="text-center" scope="col">ID</th>
+              <th class="text-center" scope="col">Montant</th>
+              <th class="text-center" scope="col">Description</th>
+              <th class="text-center" scope="col">Source</th>
+              <th class="text-center" scope="col">Date de paiement</th>
+              <th class="text-center" scope="col">Invoice Reference</th>
+              <th class="text-center" scope="col">Actions</th>
+            </tr>
+            </thead>
+
+            <tbody>
+            <tr th:each="payment : ${payments}">
+              <td class="text-center" th:text="${payment.id}"></td>
+              <td class="text-center" th:text="${payment.amount}"></td>
+              <td class="text-center" th:text="${payment.description}"></td>
+              <td class="text-center" th:text="${payment.paymentSource}"></td>
+              <td class="text-center" th:text="${payment.paymentDate}"></td>
+              <td class="text-center" th:text="${payment.invoiceId}"></td>
+              <td class="text-center">
+                <a th:href="@{/admin/payments/edit/{id}(id=${payment.id})}" class="btn btn-warning btn-sm">Modifier</a>
+                <form th:action="@{/admin/payments/delete/{id}(id=${payment.id})}" method="post" style="display:inline;">
+                  <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Voulez-vous vraiment supprimer ce paiement ?');">
+                    Supprimer
+                  </button>
+                </form>
+              </td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Footer -->
+      <div th:replace="fragments/template :: footer"></div>
+
+      <!-- Core JS Files -->
+      <script src="/assets/js/core/jquery-3.7.1.min.js"></script>
+      <script src="/assets/js/core/popper.min.js"></script>
+      <script src="/assets/js/core/bootstrap.min.js"></script>
+      <!-- jQuery Scrollbar -->
+      <script src="/assets/js/plugin/jquery-scrollbar/jquery.scrollbar.min.js"></script>
+      <!-- Bootstrap Notify -->
+      <script src="/assets/js/plugin/bootstrap-notify/bootstrap-notify.min.js"></script>
+      <!-- Sweet Alert -->
+      <script src="/assets/js/plugin/sweetalert/sweetalert.min.js"></script>
+      <!-- Kaiadmin JS -->
+      <script src="/assets/js/kaiadmin.min.js"></script>
+    </div>
+  </div>
+</body>
+</html>
