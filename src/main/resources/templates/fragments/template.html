@@ -60,7 +60,7 @@
         <!-- Logo Header -->
         <div class="logo-header" data-background-color="dark">
             <a href="/admin/dashboard" class="logo">
-                    <span style="color: white; font-weight: bold; margin-left: 8px; font-size: larger;" >
+                    <span style="color: white; font-weight: bold; margin-left: 8px; font-size: larger;" th:text="${session.user.getEmail()}">
                     </span>
             </a>
             <div class="nav-toggle">
