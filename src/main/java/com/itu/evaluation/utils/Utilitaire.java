@@ -6,12 +6,11 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.sql.Date;
 import java.sql.Timestamp;
-import java.text.DateFormat;
-import java.text.NumberFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
+import java.text.*;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.*;
@@ -1700,6 +1699,38 @@ public class Utilitaire {
         return Arrays.stream(text.split(separator))
                 .map(String::trim)
                 .toArray(String[]::new);
+    }
+
+    public static String formatDeadline(String rawDeadline) {
+        if (rawDeadline == null || rawDeadline.isEmpty()) {
+            return "Non spécifiée";
+        }
+
+        try {
+            Instant instant = Instant.parse(rawDeadline);
+            ZonedDateTime zonedDateTime = instant.atZone(java.time.ZoneId.systemDefault());
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
+            return zonedDateTime.format(formatter);
+        } catch (Exception e) {
+            return "Format invalide";
+        }
+    }
+
+    // Méthode pour formater les nombres
+    public static String formatNumber(Object number) {
+        DecimalFormat decimalFormat = new DecimalFormat("#,##0.00");
+        if (number == null) {
+            return "0.00";  // Valeur par défaut si le nombre est null
+        }
+
+        try {
+            // Si le nombre est déjà une chaîne, le convertir en Double
+            Double value = Double.parseDouble(number.toString());
+            return decimalFormat.format(value);  // Formater le nombre avec le format souhaité
+        } catch (NumberFormatException e) {
+            // Gérer l'exception si la conversion échoue (ex: si le nombre n'est pas valide)
+            return "0.00";
+        }
     }
 
 }
