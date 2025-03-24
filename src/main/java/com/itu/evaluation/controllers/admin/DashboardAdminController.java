@@ -1,6 +1,7 @@
 package com.itu.evaluation.controllers.admin;
 
 import com.itu.evaluation.dto.Kpis;
+import com.itu.evaluation.dto.NewClient;
 import com.itu.evaluation.dto.PaymentInvoiceLine;
 import com.itu.evaluation.dto.PaymentSource;
 import com.itu.evaluation.services.DashboardService;
@@ -72,7 +73,25 @@ public DashboardAdminController(final DashboardService dashboardService) {
                     list_payementInvoice.add(paymentInvoiceLine);
                 }
                 model.addAttribute("payementinvoicelines", list_payementInvoice);
+
+
+                /**client nombre**/
+                int count = 0;
+                List<NewClient> list_clients = new ArrayList<>();
+                List<Map<String, Object>> list_clientsMap = (List<Map<String, Object>>) data.get("clients");
+                for(Map<String, Object> client_map : list_clientsMap) {
+                    NewClient newClient = new NewClient();
+                    int nombre  = (int)client_map.get("client_number");
+                    count+=nombre;
+                    newClient.setClient_number(nombre);
+                    newClient.setMonth((int)client_map.get("month"));
+                    newClient.setYear((int)client_map.get("year"));
+                    list_clients.add(newClient);
+                }
+                model.addAttribute("clients", list_clients);
+                model.addAttribute("nbclient", count);
             }
+
         } else {
             model.addAttribute("error", "Impossible de charger les KPI.");
         }

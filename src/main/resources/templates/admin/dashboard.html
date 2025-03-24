@@ -168,7 +168,7 @@
                     <div class="col-5">
                         <div class="card" style="max-height: 64vh; overflow: hidden;">
                             <div class="card-header">
-                            <h3>Payement par type de source</h3>
+                            <h3>Répartition des paiements par source</h3>
                             </div>
                             <div class="card-body mt-2" style="overflow-y: auto;" >
                                 <ul class="nav nav-pills nav-secondary" id="pills-tab" role="tablist">
@@ -221,21 +221,7 @@
 
                         <div class="card " style="max-height: 64vh; overflow: hidden;">
                             <div class="card-header">
-                                <form method="GET" action="" class="row g-3">
-                                    <div class="col-3">
-                                        <select name="" id="" class="form-select">
-                                            <option value="">-- Toutes les XXX --</option>
-                                        </select>
-                                    </div>
-                                    <div class="col-3">
-                                        <select name="" id="" class="form-select">
-                                            <option value="">-- Toutes les XXX --</option>
-                                        </select>
-                                    </div>
-                                    <div class="col-2">
-                                        <button type="submit" class="btn btn-success">Valider</button>
-                                    </div>
-                                </form>
+                                <h1 class="text-center" th:text="'Nombre Total de client sur l\'année : ' + ${nbclient}"></h1>
                             </div>
                             <div class="card-body" style="overflow-y: auto;">
                                 <ul class="nav nav-pills nav-secondary" id="pills-tab" role="tablist">
@@ -257,56 +243,21 @@
                                             <table class="table align-items-center mb-0">
                                                 <thead class="thead-light">
                                                 <tr>
-                                                    <th scope="col">Payment Number</th>
-                                                    <th scope="col" class="text-end">Date & Time</th>
-                                                    <th scope="col" class="text-end">Amount</th>
+                                                    <th scope="col">Client Number</th>
+                                                    <th scope="col" class="text-end">Month</th>
+                                                    <th scope="col" class="text-end">Year</th>
                                                 </tr>
                                                 </thead>
                                                 <tbody>
-                                                <tr>
-                                                    <td class="text-end">Mar 19, 2020, 2.45pm</td>
-                                                    <td class="text-end">$250.00</td>
-                                                    <td class="text-end">
-                                                        <span class="badge badge-success">Completed</span>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td class="text-end">Mar 19, 2020, 2.45pm</td>
-                                                    <td class="text-end">$250.00</td>
-                                                    <td class="text-end">
-                                                        <span class="badge badge-success">Completed</span>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td class="text-end">Mar 19, 2020, 2.45pm</td>
-                                                    <td class="text-end">$250.00</td>
-                                                    <td class="text-end">
-                                                        <span class="badge badge-success">Completed</span>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td class="text-end">Mar 19, 2020, 2.45pm</td>
-                                                    <td class="text-end">$250.00</td>
-                                                    <td class="text-end">
-                                                        <span class="badge badge-success">Completed</span>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td class="text-end">Mar 19, 2020, 2.45pm</td>
-                                                    <td class="text-end">$250.00</td>
-                                                    <td class="text-end">
-                                                        <span class="badge badge-success">Completed</span>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td class="text-end">Mar 19, 2020, 2.45pm</td>
-                                                    <td class="text-end">$250.00</td>
-                                                    <td class="text-end">
-                                                        <span class="badge badge-success">Completed</span>
-                                                    </td>
+                                                <!-- Boucle Thymeleaf pour afficher les clients -->
+                                                <tr th:each="client : ${clients}">
+                                                    <td class="text-end" th:text="${client.client_number}"></td>  <!-- Afficher le client_number -->
+                                                    <td class="text-end" th:text="${client.month}"></td>          <!-- Afficher le mois -->
+                                                    <td class="text-end" th:text="${client.year}"></td>           <!-- Afficher l'année -->
                                                 </tr>
                                                 </tbody>
                                             </table>
+
                                         </div>
                                     </div>
                                 </div>
@@ -429,8 +380,75 @@
         </script>
 
 
+        <script th:inline="javascript">
+            /*<![CDATA[*/
+            var clients = /*[[${clients}]]*/ [];
+
+            // Vérifier si les données des clients sont bien récupérées
+            console.log("Données des clients récupérées :", clients);
+
+            // Initialiser un tableau de 12 éléments pour chaque mois de l'année
+            var clientData = Array(12).fill(0);
+
+            // Transformer les données pour le line chart
+            clients.forEach(function(item) {
+                var monthIndex = item.month - 1;  // Janvier = 0, Février = 1, etc.
+                clientData[monthIndex] += item.client_number;  // Ajouter le nombre de clients au mois correspondant
+            });
+
+            // Labels des mois
+            var labels = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+
+            // Créer le graphique
+            var lineChart = document.getElementById("lineChart").getContext("2d");
+            var myLineChart = new Chart(lineChart, {
+                type: "line",
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: "Clients",
+                        borderColor: "#1d7af3",  // Couleur de la ligne
+                        pointBorderColor: "#FFF",  // Couleur des points
+                        pointBackgroundColor: "#1d7af3",
+                        pointBorderWidth: 2,
+                        pointHoverRadius: 4,
+                        pointHoverBorderWidth: 1,
+                        pointRadius: 4,
+                        backgroundColor: "transparent",  // Pas de fond pour les lignes
+                        fill: false,  // Pas de remplissage sous la ligne
+                        borderWidth: 2,
+                        data: clientData  // Données calculées pour le nombre de clients par mois
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    legend: {
+                        position: "bottom",
+                        labels: {
+                            padding: 10,
+                            fontColor: "#1d7af3",
+                        }
+                    },
+                    tooltips: {
+                        bodySpacing: 4,
+                        mode: "nearest",
+                        intersect: 0,
+                        position: "nearest",
+                        xPadding: 10,
+                        yPadding: 10,
+                        caretPadding: 10
+                    },
+                    layout: {
+                        padding: { left: 15, right: 15, top: 15, bottom: 15 }
+                    }
+                }
+            });
+            /*]]>*/
+        </script>
+
+
         <div th:replace="fragments/template :: footer"></div>
-        <script src="/assets/js/chart/dashboard/linechart.js"></script>
         <!--   Core JS Files   -->
         <script src="/assets/js/core/jquery-3.7.1.min.js"></script>
         <script src="/assets/js/core/popper.min.js"></script>
