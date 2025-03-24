@@ -47,7 +47,7 @@ public DashboardAdminController(final DashboardService dashboardService) {
                 kpis.setTotalOffers((int) datas.get("totalOffers"));
                 kpis.setTotalInvoices((int)datas.get("totalInvoices"));
                 kpis.setTotalInvoiceAmount(Double.parseDouble((String)datas.get("totalInvoiceAmount")));
-                kpis.setTotalPayment((int)datas.get("totalPayment"));
+                kpis.setTotalPayment(Integer.parseInt(datas.get("totalPayment").toString()));
                 model.addAttribute("kpis", kpis);
 
                 /*ssource payment**/
