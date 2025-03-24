@@ -27,7 +27,6 @@ public DashboardAdminController(final DashboardService dashboardService) {
 
     @GetMapping("/admin/dashboard")
     public String dashboard(HttpSession session, Model model, @RequestParam(name = "year", defaultValue = "2025") String year) {
-    System.out.println(year);
         // Récupérer le token de session
         String token = (String) session.getAttribute("token");
         if (token == null) {
