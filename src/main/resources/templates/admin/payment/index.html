@@ -18,20 +18,29 @@
               <th class="text-center" scope="col">Source</th>
               <th class="text-center" scope="col">Date de paiement</th>
               <th class="text-center" scope="col">Invoice Reference</th>
-              <th class="text-center" scope="col">Actions</th>
+              <th class="text-center" scope="col">modification prix</th>
+              <th class="text-center" scope="col">Suppression</th>
             </tr>
             </thead>
 
             <tbody>
             <tr th:each="payment : ${payments}">
               <td class="text-center" th:text="${payment.id}"></td>
-              <td class="text-center" th:text="${payment.amount}"></td>
+              <td class="text-center" th:text="${payment.amount}"></td> <!-- Montant affiché initialement -->
               <td class="text-center" th:text="${payment.description}"></td>
               <td class="text-center" th:text="${payment.paymentSource}"></td>
               <td class="text-center" th:text="${payment.paymentDate}"></td>
               <td class="text-center" th:text="${payment.invoiceId}"></td>
               <td class="text-center">
-                <a th:href="@{/admin/payments/edit/{id}(id=${payment.id})}" class="btn btn-warning btn-sm">Modifier</a>
+                <!-- Formulaire de modification du montant -->
+                <form th:action="@{/admin/payments/edit}" method="post" style="display:inline;">
+                  <input type="number" th:value="${payment.amount}" name="amount" class="form-control" />
+                  <input type="hidden" th:value="${payment.id}" name="id" />
+                  <button type="submit" class="btn btn-warning btn-sm">Modifier</button>
+                </form>
+              </td>
+              <td class="text-center">
+                <!-- Formulaire pour la suppression -->
                 <form th:action="@{/admin/payments/delete/{id}(id=${payment.id})}" method="post" style="display:inline;">
                   <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Voulez-vous vraiment supprimer ce paiement ?');">
                     Supprimer
@@ -39,9 +48,14 @@
                 </form>
               </td>
             </tr>
+
+
             </tbody>
           </table>
         </div>
+
+        <div th:if="${message}" th:text="${message}" class="alert alert-info"></div>
+
       </div>
 
       <!-- Footer -->

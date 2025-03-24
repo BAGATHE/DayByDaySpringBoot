@@ -18,4 +18,7 @@ public class UrlApi {
 
     public static final String REMISE = "http://localhost/api/settings/remise";
     public static final String UPDATEREMISE = "http://localhost/api/settings/update/remise";
+
+    public static final String UPDATEPAYMENT = "http://localhost/api/payement/update";
+    public static final String DELETEPAY = "http://localhost/api/payement/delete";
 }

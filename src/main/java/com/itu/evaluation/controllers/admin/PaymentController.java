@@ -7,8 +7,10 @@ import com.itu.evaluation.utils.Utilitaire;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -24,7 +26,7 @@ public class PaymentController {
 
 
     @GetMapping("/admin/payments")
-    public String payments(Model model, HttpSession session) {
+    public String payments(Model model, HttpSession session,@ModelAttribute("message") Object message) {
         String token = (String) session.getAttribute("token");
         if (token == null) {
             return "redirect:/admin/login";
@@ -49,7 +51,35 @@ public class PaymentController {
             }
         }
         model.addAttribute("payments", listpayments);
+        model.addAttribute("message", message);
         return "admin/payment/index";
+    }
+
+    @PostMapping("/admin/payments/edit")
+    public String editPayment(@RequestParam("id") String id, @RequestParam("amount") String amount, RedirectAttributes redirectAttributes, HttpSession session) {
+        String token = (String) session.getAttribute("token");
+        if (token == null) {
+            return "redirect:/admin/login";
+        }
+            double price = Double.parseDouble((String)amount);
+            int id_payment = Integer.parseInt((String)id);
+
+            Map<String,Object> response = paymentService.UPDATEPricePayement(token,id_payment,price);
+                Map<String, Object> data = (Map<String, Object>) response.get("data");
+                redirectAttributes.addFlashAttribute("message", data.get("message").toString());
+            return "redirect:/admin/payments";
+
+    }
+
+    @PostMapping("/admin/payments/delete/{id}")
+    public String deletePayment(@PathVariable("id") String paymentId,HttpSession session) {
+        String token = (String) session.getAttribute("token");
+        if (token == null) {
+            return "redirect:/admin/login";
+        }
+        int id_payment = Integer.parseInt((String)paymentId);
+        Map<String,Object> response = paymentService.DeletePayement(token,id_payment);
+        return "redirect:/admin/payments"; // Redirection vers la liste des paiements
     }
 
 
