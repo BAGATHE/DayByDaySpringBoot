@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/template :: head"></head>
+<body>
+<div class="wrapper">
+  <div th:replace="fragments/template :: sidebar"></div>
+
+  <div class="main-panel">
+    <div class="page-inner">
+      <div class="container mt-5">
+
+        <!-- Titre principal -->
+        <h1 class="text-center font-weight-bold">Remise Invoice Global Actuelle : <span th:text="${remise} + ' %'"></span></h1>
+
+        <!-- Formulaire de mise à jour de la remise -->
+        <div class="card mt-4">
+          <div class="card-body">
+            <h3 class="card-title">Mettre à jour la remise</h3>
+            <form th:action="@{/admin/configuration/remise/update}" method="post">
+              <div class="form-group">
+                <label for="remise">Nouvelle remise (%) :</label>
+                <input type="number" step="0.01" class="form-control" id="remise" name="remise"
+                       th:value="${remise}" required>
+              </div>
+              <button type="submit" class="btn btn-primary">Mettre à jour</button>
+            </form>
+          </div>
+        </div>
+
+      </div>
+      <div th:if="${isSuccess}" class="alert" th:classappend="${isSuccess} ? 'alert-success' : 'alert-danger'">
+        <p th:text="${message}"></p>
+      </div>
+
+
+      <div th:replace="fragments/template :: footer"></div>
+    </div>
+  </div>
+</div>
+
+<!-- Scripts -->
+<script src="/assets/js/core/jquery-3.7.1.min.js"></script>
+<script src="/assets/js/core/popper.min.js"></script>
+<script src="/assets/js/core/bootstrap.min.js"></script>
+<script src="/assets/js/plugin/jquery-scrollbar/jquery.scrollbar.min.js"></script>
+<script src="/assets/js/plugin/bootstrap-notify/bootstrap-notify.min.js"></script>
+<script src="/assets/js/plugin/sweetalert/sweetalert.min.js"></script>
+<script src="/assets/js/kaiadmin.min.js"></script>
+
+</body>
+</html>

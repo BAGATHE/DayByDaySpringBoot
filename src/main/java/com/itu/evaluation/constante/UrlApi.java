@@ -13,4 +13,9 @@ public class UrlApi {
 
     /*facture*/
     public static final String PAYEMENTS = "http://localhost/api/payments";
+
+    /*remise*/
+
+    public static final String REMISE = "http://localhost/api/settings/remise";
+    public static final String UPDATEREMISE = "http://localhost/api/settings/update/remise";
 }
