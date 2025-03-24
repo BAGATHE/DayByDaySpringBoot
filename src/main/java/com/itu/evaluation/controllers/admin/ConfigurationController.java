@@ -59,7 +59,7 @@ public ConfigurationController(RemiseService remiseService) {
             Map<String, Object> data = (Map<String, Object>) response.get("data");
             if (data != null && data.containsKey("isSuccess")) {
                 redirectAttributes.addFlashAttribute("isSuccess", data.get("isSuccess"));
-                redirectAttributes.addFlashAttribute("message", data.get("message"));
+                redirectAttributes.addFlashAttribute("message", data.get("message").toString());
             }
         } else {
             redirectAttributes.addFlashAttribute("isSuccess", false);
