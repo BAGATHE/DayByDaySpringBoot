@@ -21,4 +21,5 @@ public class UrlApi {
 
     public static final String UPDATEPAYMENT = "http://localhost/api/payement/update";
     public static final String DELETEPAY = "http://localhost/api/payement/delete";
+    public static final String IMPORT_ENTITY = "http://localhost/api/import/client";
 }
