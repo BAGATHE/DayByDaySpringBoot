@@ -8,13 +8,8 @@
     <div class="main-panel">
         <div class="page-inner ">
             <div class="row mb-4 justify-content-center align-items-center ">
-                <div th:each="entry : ${statusCount}" class="col-3">
-                    <div class="card text-white" th:classappend="${entry.key == 'won' ? 'bg-success' : (entry.key == 'in-progress' ? 'bg-warning' : 'bg-secondary')}">
-                        <div class="card-body">
-                            <h5 class="card-title text-center" th:text="${entry.key}"></h5>
-                            <p class="card-text text-center" th:text="${entry.value} + ' offres'"></p>
-                        </div>
-                    </div>
+                <div class="col-md-6">
+                    <canvas id="donutChart"></canvas>
                 </div>
             </div>
             <div class="row">
@@ -43,6 +38,42 @@
                     </table>
                 </div>
             </div>
+            <!-- Chart JS -->
+            <script src="/assets/js/plugin/chart.js/chart.min.js"></script>
+            <script th:inline="javascript">
+                document.addEventListener("DOMContentLoaded", function () {
+                    let statusData = /*[[${statusCount}]]*/ {};
+
+                    let labels = Object.keys(statusData);
+                    let values = Object.values(statusData);
+
+                    let colors = labels.map(label => {
+                        return label === 'won' ? '#28a745' : (label === 'in-progress' ? '#ffc107' : (label === 'lost' ? '#dc3545' : '#6c757d'));
+                    });
+
+                    // Configurer le Donut Chart
+                    let ctx = document.getElementById('donutChart').getContext('2d');
+                    new Chart(ctx, {
+                        type: 'doughnut',
+                        data: {
+                            labels: labels,
+                            datasets: [{
+                                data: values,
+                                backgroundColor: colors,
+                                hoverOffset: 10
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            plugins: {
+                                legend: {
+                                    position: 'bottom'
+                                }
+                            }
+                        }
+                    });
+                });
+            </script>
 
             <!-- Chart JS -->
             <div th:replace="fragments/template :: footer"></div>

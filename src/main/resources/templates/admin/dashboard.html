@@ -45,7 +45,7 @@
                                     </div>
                                     <div class="col col-stats ms-3 ms-sm-0">
                                         <div class="numbers">
-                                            <p class="card-category">Total Invoices Paid</p>
+                                            <p class="card-category">Total Invoices </p>
                                             <h4 class="card-title" th:text="${kpis.totalInvoices}">0</h4>
                                         </div>
                                     </div>
@@ -67,7 +67,7 @@
                                     <div class="col col-stats ms-3 ms-sm-0">
                                         <div class="numbers">
                                             <p class="card-category">Sum Invoices</p>
-                                            <h4 class="card-title" th:text="${kpis.totalInvoiceAmount} + ' $'">0</h4>
+                                            <h4 class="card-title" th:text="${#numbers.formatDecimal(kpis.totalInvoiceAmount,0,'WHITESPACE',2,'COMMA')} + ' $'">0</h4>
                                         </div>
                                     </div>
                                 </div>

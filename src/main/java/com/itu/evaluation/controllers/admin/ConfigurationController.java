@@ -1,6 +1,7 @@
 package com.itu.evaluation.controllers.admin;
 
 import com.itu.evaluation.dto.RemiseInvoice;
+import com.itu.evaluation.services.ImportService;
 import com.itu.evaluation.services.RemiseService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
@@ -9,16 +10,20 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.io.IOException;
 import java.util.Map;
 
 @Controller
 public class ConfigurationController {
 private final RemiseService remiseService;
+private final ImportService importService;
 
-public ConfigurationController(RemiseService remiseService) {
+public ConfigurationController(RemiseService remiseService, ImportService importService0) {
     this.remiseService = remiseService;
+    this.importService = importService0;
 }
 
     @GetMapping("/admin/configuration/remise")
@@ -67,6 +72,34 @@ public ConfigurationController(RemiseService remiseService) {
         }
 
         return "redirect:/admin/configuration/remise";
+    }
+
+
+
+    @GetMapping("/admin/configuration/import")
+    public String ImportEntityForm(){
+        return "admin/entity/import";
+    }
+
+    @PostMapping("/admin/configuration/import")
+    public String importEspace(@RequestParam("file") MultipartFile file, RedirectAttributes redirectAttributes, HttpSession session, ImportService importService, Model model) throws IOException {
+        try {
+            String token = (String) session.getAttribute("token");
+            if (token == null) {
+                return "redirect:/admin/login";
+            }
+            Map<String, Object> response = remiseService.CLIENTIMPORT(token, file);
+            if (response != null && response.containsKey("status") && "success".equals(response.get("status"))) {
+                Map<String, Object> data = (Map<String, Object>) response.get("data");
+                String message = (String) data.get("message");
+                redirectAttributes.addFlashAttribute("success", "Importation réussie !");
+                model.addAttribute("message", message);
+            }
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("error", "Erreur lors de l'importation : " + e.getMessage());
+        }
+
+        return "admin/entity/import";
     }
 
 }

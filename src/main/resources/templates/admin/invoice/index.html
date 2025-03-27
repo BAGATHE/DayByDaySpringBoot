@@ -7,6 +7,45 @@
 
   <div class="main-panel">
     <div class="page-inner">
+      <div class="row mb-4 justify-content-center align-items-center">
+        <!-- Carte Total Paid -->
+        <div class="col-md-3">
+          <div class="card bg-success text-white">
+            <div class="card-body text-center">
+              <h5 class="card-title">Paid</h5>
+              <p class="card-text" id="totalPaid">0 invoices</p>
+            </div>
+          </div>
+        </div>
+        <!-- Carte Total Unpaid -->
+        <div class="col-md-3">
+          <div class="card bg-danger text-white">
+            <div class="card-body text-center">
+              <h5 class="card-title">Unpaid</h5>
+              <p class="card-text" id="totalUnpaid">0 invoices</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-3">
+          <div class="card bg-warning text-white">
+            <div class="card-body text-center">
+              <h5 class="card-title">Partial Paid</h5>
+              <p class="card-text" id="totalPartialPaid">0 invoices</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Donut Chart -->
+      <div class="row mb-4 justify-content-center align-items-center">
+        <div class="col-md-6">
+          <canvas id="invoiceDonutChart"></canvas>
+        </div>
+      </div>
+
+
       <div class="row">
         <div class="col-12">
           <table class="table table-bordered table-head-bg-success mt-3">
@@ -38,6 +77,61 @@
           </table>
         </div>
       </div>
+
+      <script src="/assets/js/plugin/chart.js/chart.min.js"></script>
+
+      <script th:inline="javascript">
+        document.addEventListener("DOMContentLoaded", function () {
+          let invoices = /*[[${invoices}]]*/ [];
+
+          let countPaid = 0, countUnpaid = 0, countPartialPaid = 0;
+          let totalPricePaid = 0, totalPriceUnpaid = 0, totalPricePartialPaid = 0;
+
+          invoices.forEach(invoice => {
+            let price = parseFloat(invoice.total_price.replace(/\s/g, '').replace(',', '.'));
+
+            if (invoice.status === "paid") {
+              countPaid++;
+              totalPricePaid += price;
+            } else if (invoice.status === "unpaid") {
+              countUnpaid++;
+              totalPriceUnpaid += price;
+            } else if (invoice.status === "partial_paid") {
+              countPartialPaid++;
+              totalPricePartialPaid += price;
+            }
+          });
+
+          // Mise à jour des cartes
+          document.getElementById("totalPaid").textContent = countPaid + " invoices";
+          document.getElementById("totalUnpaid").textContent = countUnpaid + " invoices";
+          document.getElementById("totalPartialPaid").textContent = countPartialPaid + " invoices";
+
+          // Mise à jour du Donut Chart
+          let ctx = document.getElementById('invoiceDonutChart').getContext('2d');
+          new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+              labels: ["Paid", "Unpaid", "Partial Paid"],
+              datasets: [{
+                data: [totalPricePaid, totalPriceUnpaid, totalPricePartialPaid],
+                backgroundColor: ['#28a745', '#dc3545', '#ffc107'],
+                hoverOffset: 10
+              }]
+            },
+            options: {
+              responsive: true,
+              plugins: {
+                legend: {
+                  position: 'bottom'
+                }
+              }
+            }
+          });
+        });
+      </script>
+
+
 
       <!-- Chart JS -->
       <div th:replace="fragments/template :: footer"></div>
